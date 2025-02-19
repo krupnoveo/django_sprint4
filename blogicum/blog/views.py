@@ -35,8 +35,7 @@ def post_detail(request, post_id):
     post = get_object_or_404(
         Post.objects.select_related('category', 'author', 'location')
         .filter(Q(is_published=True, category__is_published=True,
-                  pub_date__lte=now()) |
-                Q(author=request.user)),
+                  pub_date__lte=now()) | Q(author=request.user)),
         pk=post_id
     )
 
