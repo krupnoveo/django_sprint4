@@ -30,6 +30,7 @@ def index(request):
     template = 'blog/index.html'
     return render(request, template, context)
 
+
 def post_detail(request, post_id):
     post = get_object_or_404(
         Post.objects.select_related('category', 'author', 'location')
@@ -46,6 +47,7 @@ def post_detail(request, post_id):
     template = 'blog/detail.html'
     return render(request, template, context)
 
+
 @login_required
 def create_post(request):
     if request.method == "POST":
@@ -61,6 +63,7 @@ def create_post(request):
     context = {'form': form}
     template = 'blog/create.html'
     return render(request, template, context)
+
 
 @login_required(login_url='login')
 def edit_post(request, post_id):
@@ -81,6 +84,7 @@ def edit_post(request, post_id):
     template = 'blog/create.html'
     return render(request, template, context)
 
+
 @login_required
 def delete_post(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
@@ -95,6 +99,7 @@ def delete_post(request, post_id):
     context = {'post': post}
     template = 'blog/delete_confirm.html'
     return render(request, template, context)
+
 
 def category_posts(request, category_slug):
     template = 'blog/category.html'
@@ -113,6 +118,7 @@ def category_posts(request, category_slug):
         'page_obj': page_obj,
     }
     return render(request, template, context)
+
 
 @login_required
 def add_comment(request, post_id):
@@ -147,6 +153,7 @@ def edit_comment(request, post_id, comment_id):
     context = {'comment': comment, 'form': form}
     template = 'blog/comment.html'
     return render(request, template, context)
+
 
 @login_required
 def delete_comment(request, post_id, comment_id):
@@ -192,9 +199,10 @@ def profile(request, username):
     paginator = Paginator(posts, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+    context = {'page_obj': page_obj, 'profile': profile_user}
+    template = 'blog/profile.html'
+    return render(request, template, context)
 
-    return render(request, 'blog/profile.html',
-                  {'page_obj': page_obj, 'profile': profile_user})
 
 @login_required
 def edit_profile(request):
@@ -205,4 +213,7 @@ def edit_profile(request):
             return redirect('blog:profile', username=request.user.username)
     else:
         form = EditUserForm(instance=request.user)
-    return render(request, 'blog/user.html', {'form': form})
+
+    context = {'form': form}
+    template = 'blog/user.html'
+    return render(request, template, context)

@@ -90,6 +90,7 @@ class Post(BaseModel):
     def __str__(self):
         return self.title
 
+
 class Comment(BaseModel):
     text = models.TextField(verbose_name="Текст")
 
